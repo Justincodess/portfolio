@@ -1,0 +1,74 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+
+body{
+    background-color: rgb(17, 17, 17);
+    color: white;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#navSection{
+    height: 100px;
+    width: 100vw;
+    background-color:rgb(15, 15, 15);
+}
+
+a{
+    text-decoration: none;
+    color: white;
+    font-size: 23px;
+    position: relative;
+    top: 30px;
+    left: 10px;
+}
+
+#logo{
+    color: rgb(255, 255, 76);
+    font-size: 30px;
+    font-family: fantasy;
+    left: 30px;
+    text-shadow: 0 0 40px rgb(104, 104, 104);
+}
+
+.mainNav{
+    margin-right: 25px;
+    left: 68vw;
+    transition: 0.3s;
+}
+
+.mainNav:hover{
+    text-shadow:0 0 40px yellow ;
+}
+
+#footer{
+    font-size: 15px;
+    height: 50px;
+    width: 100vw;
+    background-color: rgb(15, 15, 15);
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+
+#footerText{
+    margin: 10px 0 10px 0 ;
+    display: inline;
+}
+
+#hearts{
+    display: inline-block;
+    animation: glow 1s ease-in-out infinite alternate;
+}
+
+@keyframes glow{
+    from{
+        text-shadow: 0 0 10px red,0 0 10px red,0 0 20px red, 0 0 20px red, 0 0 40px red, 0 0 20px red;
+    }
+    to{
+        text-shadow: none;
+    }
+}
