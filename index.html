@@ -1,32 +1,1074 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Justin </title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Justin Acharya — Designer & Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+
+  <style>
+    /* =============================================
+       CSS CUSTOM PROPERTIES — DESIGN TOKENS
+    ============================================= */
+    :root {
+      --bg:         #111110;
+      --bg-2:       #181816;
+      --bg-3:       #1f1f1d;
+      --border:     #2a2a28;
+      --text:       #e8e6e1;
+      --text-muted: #7a7873;
+      --text-dim:   #4a4946;
+      --accent:     #d4c9b8;
+      --white:      #f5f3ef;
+
+      --font-display: 'DM Serif Display', Georgia, serif;
+      --font-body:    'DM Sans', system-ui, sans-serif;
+
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 16px;
+
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* =============================================
+       RESET & BASE
+    ============================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+
+    /* =============================================
+       UTILITY
+    ============================================= */
+    .container {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .section-label {
+      font-family: var(--font-body);
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 3rem;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+      max-width: 60px;
+    }
+
+    /* Fade-in on scroll */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* =============================================
+       NAVIGATION
+    ============================================= */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      transition: background 0.4s var(--ease-in-out), border-color 0.4s;
+    }
+    nav.scrolled {
+      background: rgba(17, 17, 16, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      color: var(--white);
+      letter-spacing: -0.01em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+    }
+    .nav-links a {
+      font-size: 0.8rem;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* Hamburger (mobile) */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 22px;
+      height: 1.5px;
+      background: var(--text-muted);
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .nav-toggle.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      top: 68px;
+      background: var(--bg);
+      z-index: 99;
+      padding: 3rem 2rem;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-size: 1.4rem;
+      font-weight: 300;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.5rem;
+    }
+
+    /* =============================================
+       HERO
+    ============================================= */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding-bottom: 5rem;
+      padding-top: 120px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Subtle grid texture */
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    /* Radial vignette */
+    #hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 20% 80%, transparent 40%, var(--bg) 100%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      opacity: 0;
+      animation: fadeSlide 0.8s 0.2s var(--ease-out) forwards;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: var(--text-dim);
+    }
+
+    .hero-name {
+      font-family: var(--font-display);
+      font-size: clamp(3.5rem, 9vw, 8.5rem);
+      font-weight: 400;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+      opacity: 0;
+      animation: fadeSlide 0.9s 0.4s var(--ease-out) forwards;
+    }
+    .hero-name em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.5rem);
+      font-weight: 300;
+      color: var(--text-muted);
+      margin-bottom: 3.5rem;
+      opacity: 0;
+      animation: fadeSlide 0.9s 0.6s var(--ease-out) forwards;
+    }
+
+    .hero-cta {
+      opacity: 0;
+      animation: fadeSlide 0.9s 0.8s var(--ease-out) forwards;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.875rem 2rem;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      transition: background 0.25s, border-color 0.25s, color 0.25s;
+      border-radius: var(--radius-sm);
+    }
+    .btn-primary:hover {
+      background: var(--bg-3);
+      border-color: var(--text-dim);
+      color: var(--white);
+    }
+    .btn-primary .arrow {
+      font-size: 1rem;
+      transition: transform 0.25s var(--ease-out);
+    }
+    .btn-primary:hover .arrow { transform: translateX(4px); }
+
+    .hero-meta {
+      position: absolute;
+      bottom: 2.5rem;
+      right: 0;
+      z-index: 1;
+      opacity: 0;
+      animation: fadeIn 1s 1.2s forwards;
+      text-align: right;
+    }
+    .hero-meta span {
+      display: block;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    /* =============================================
+       DIVIDER
+    ============================================= */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      width: 100%;
+    }
+
+    /* =============================================
+       ABOUT
+    ============================================= */
+    #about { padding: 7rem 0; }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.8fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+
+    .about-portrait {
+      width: 100%;
+      aspect-ratio: 4/5;
+      background: var(--bg-3);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .about-portrait-inner {
+      width: 100%;
+      height: 100%;
+      background: var(--bg-3);
+    }
+
+
+    .about-heading {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      margin-bottom: 1.75rem;
+    }
+    .about-heading em { font-style: italic; color: var(--accent); }
+
+    .about-text {
+      font-size: 1rem;
+      line-height: 1.85;
+      color: var(--text-muted);
+      margin-bottom: 2.5rem;
+      max-width: 52ch;
+    }
+
+    .about-skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .skill-tag {
+      padding: 0.35rem 0.85rem;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+
+    /* =============================================
+       DESIGN PORTFOLIO
+    ============================================= */
+    #portfolio { padding: 6rem 0 7rem; background: var(--bg-2); }
+
+    .portfolio-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 3.5rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      line-height: 1.1;
+    }
+
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+
+    /* First item spans 2 columns for visual interest */
+    .portfolio-item:nth-child(1) { grid-column: span 2; }
+
+    .portfolio-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      background: var(--bg-3);
+    }
+
+    .portfolio-thumb {
+      width: 100%;
+      aspect-ratio: 4/3;
+      position: relative;
+      overflow: hidden;
+    }
+    .portfolio-item:nth-child(1) .portfolio-thumb { aspect-ratio: 16/9; }
+
+    .portfolio-thumb-img {
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s var(--ease-out);
+    }
+    .portfolio-item:hover .portfolio-thumb-img { transform: scale(1.03); }
+
+
+    .portfolio-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(17, 17, 16, 0.75);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem;
+      opacity: 0;
+      transition: opacity 0.35s var(--ease-out);
+    }
+    .portfolio-item:hover .portfolio-overlay { opacity: 1; }
+
+    .portfolio-overlay-title {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: var(--white);
+      margin-bottom: 0.3rem;
+    }
+    .portfolio-overlay-sub {
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .portfolio-overlay-arrow {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      width: 32px; height: 32px;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .portfolio-info {
+      padding: 1.1rem 1.25rem;
+    }
+    .portfolio-info-title {
+      font-size: 0.88rem;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 0.2rem;
+    }
+    .portfolio-info-cat {
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    /* =============================================
+       LIGHTBOX
+    ============================================= */
+    #lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(10, 10, 9, 0.97);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s var(--ease-out);
+      padding: 2rem;
+    }
+    #lightbox.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .lightbox-content {
+      position: relative;
+      max-width: 880px;
+      width: 100%;
+      transform: scale(0.96);
+      transition: transform 0.35s var(--ease-out);
+    }
+    #lightbox.open .lightbox-content { transform: scale(1); }
+
+    .lightbox-image {
+      width: 100%;
+      aspect-ratio: 16/10;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    .lightbox-meta {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-top: 1.5rem;
+      gap: 1rem;
+    }
+    .lightbox-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--white);
+    }
+    .lightbox-cat {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 0.3rem;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: -48px;
+      right: 0;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .lightbox-close:hover { border-color: var(--text-dim); color: var(--white); }
+
+    /* =============================================
+       CONTACT
+    ============================================= */
+    #contact {
+      padding: 7rem 0;
+      background: var(--bg-2);
+      border-top: 1px solid var(--border);
+    }
+
+    .contact-inner {
+      max-width: 640px;
+    }
+
+    .contact-heading {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      margin-bottom: 1.5rem;
+    }
+    .contact-heading em { font-style: italic; color: var(--accent); }
+
+    .contact-text {
+      font-size: 1rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      margin-bottom: 2.5rem;
+      max-width: 46ch;
+    }
+
+    .contact-email {
+      font-family: var(--font-display);
+      font-size: clamp(1.2rem, 2.5vw, 1.75rem);
+      color: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.5rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: border-color 0.2s, color 0.2s;
+      margin-bottom: 3rem;
+    }
+    .contact-email:hover { border-color: var(--text-muted); color: var(--accent); }
+
+    .social-links {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .social-link {
+      font-size: 0.75rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      border-bottom: 1px solid transparent;
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .social-link:hover { color: var(--text); border-color: var(--text-dim); }
+
+    /* =============================================
+       FOOTER
+    ============================================= */
+    footer {
+      padding: 2rem 0;
+      border-top: 1px solid var(--border);
+    }
+    footer .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .footer-copy {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      letter-spacing: 0.06em;
+    }
+    .footer-back {
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: color 0.2s;
+    }
+    .footer-back:hover { color: var(--text-muted); }
+
+    /* =============================================
+       KEYFRAMES
+    ============================================= */
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* =============================================
+       RESPONSIVE
+    ============================================= */
+    @media (max-width: 900px) {
+      .portfolio-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .portfolio-item:nth-child(1) { grid-column: span 2; }
+      .about-grid { grid-template-columns: 1fr; }
+      .about-portrait { aspect-ratio: 3/2; max-width: 340px; }
+    }
+
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .nav-toggle { display: flex; }
+      .portfolio-grid {
+        grid-template-columns: 1fr;
+      }
+      .portfolio-item:nth-child(1) { grid-column: span 1; }
+      .portfolio-item:nth-child(1) .portfolio-thumb { aspect-ratio: 4/3; }
+      #hero { padding-bottom: 4rem; }
+      .hero-meta { display: none; }
+      .portfolio-header { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
 </head>
 <body>
-    
-    <header>
-        <div id="navSection">
-            <nav>
-                <a href="index.html" id="logo">Justin.</a>
-                <a href="#" class="mainNav" >About</a>
-                <a href="#" class="mainNav">Projects</a>
-                <a href="#" class="mainNav">Education</a>
-                <a href="#" id="contact"  class="mainNav">Contact</a>
-            </nav>
-        </div>
-    </header>
 
-    <main></main>
+  <!-- =============================================
+       NAVIGATION
+  ============================================= -->
+  <nav id="navbar">
+    <div class="container">
+      <a href="#hero" class="nav-logo">JA</a>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#portfolio">Work</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
 
-    <footer>
-        <div id="footer">
-            <p id="footerText" > Made with <p id="hearts"> &hearts;</p> <br>&copy; 2026 Justin.</p>
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#about"    onclick="closeMobile()">About</a>
+    <a href="#portfolio" onclick="closeMobile()">Work</a>
+    <a href="#contact"  onclick="closeMobile()">Contact</a>
+  </div>
+
+  <!-- =============================================
+       HERO
+  ============================================= -->
+  <section id="hero">
+    <div class="container hero-inner">
+      <p class="hero-eyebrow">Based in Kathmandu, Nepal</p>
+      <h1 class="hero-name">Justin<br /><em>Acharya</em></h1>
+      <p class="hero-tagline">Designer &amp; Developer</p>
+      <div class="hero-cta">
+        <a href="#portfolio" class="btn-primary">
+          View Work <span class="arrow">→</span>
+        </a>
+      </div>
+    </div>
+    <div class="container hero-meta">
+      <span>Portfolio</span>
+      <span>2025</span>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- =============================================
+       ABOUT
+  ============================================= -->
+  <section id="about">
+    <div class="container">
+      <p class="section-label reveal">About</p>
+      <div class="about-grid">
+        <div class="about-left reveal">
+          <div class="about-portrait">
+            <div class="about-portrait-inner">
+              <img src="pfp_cleanup.png" alt="Justin Acharya" style="width:100%;height:100%;object-fit:cover;display:block;" />
+            </div>
+          </div>
         </div>
-    </footer>
+        <div class="about-right reveal">
+          <h2 class="about-heading">Craft lives in<br /><em>the details.</em></h2>
+          <p class="about-text">
+            I'm Justin — a designer and developer from Kathmandu. I care about clean
+            visual systems, purposeful interfaces, and work that communicates clearly
+            without excess. My practice sits at the intersection of graphic design and
+            frontend development, with a growing curiosity for how AI shapes the tools
+            we build with.
+          </p>
+          <p class="about-text">
+            When I'm not designing, I'm building small software tools, reading about
+            typography, or exploring the visual culture that shapes how we see things.
+          </p>
+          <div class="about-skills">
+            <span class="skill-tag">Graphic Design</span>
+            <span class="skill-tag">UI Design</span>
+            <span class="skill-tag">Brand Identity</span>
+            <span class="skill-tag">Typography</span>
+            <span class="skill-tag">Frontend Dev</span>
+            <span class="skill-tag">AI &amp; Tools</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- =============================================
+       PORTFOLIO
+  ============================================= -->
+  <section id="portfolio">
+    <div class="container">
+      <div class="portfolio-header reveal">
+        <div>
+          <p class="section-label" style="margin-bottom:1rem;">Selected Work</p>
+          <h2 class="section-title">Design Portfolio</h2>
+        </div>
+      </div>
+
+      <div class="portfolio-grid">
+
+        <!-- Item 1 -->
+        <div class="portfolio-item reveal"
+             data-title="Ai &amp; Robotics change 1"
+             data-cat="Digital / Graphic Design"
+             data-img="portfolio/Ai &amp; Robotics change 1.png">
+          <div class="portfolio-thumb">
+            <img class="portfolio-thumb-img" src="portfolio/Ai &amp; Robotics change 1.png" alt="Ai &amp; Robotics change 1" />
+            <div class="portfolio-overlay">
+              <div class="portfolio-overlay-arrow">↗</div>
+              <p class="portfolio-overlay-sub">Digital Design</p>
+              <p class="portfolio-overlay-title">Ai &amp; Robotics change 1</p>
+            </div>
+          </div>
+          <div class="portfolio-info">
+            <p class="portfolio-info-title">Ai &amp; Robotics change 1</p>
+            <p class="portfolio-info-cat">Digital / Graphic Design</p>
+          </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="portfolio-item reveal"
+             data-title="Ambition Guru"
+             data-cat="Brand / Visual Design"
+             data-img="portfolio/Ambition Guru.png">
+          <div class="portfolio-thumb">
+            <img class="portfolio-thumb-img" src="portfolio/Ambition Guru.png" alt="Ambition Guru" />
+            <div class="portfolio-overlay">
+              <div class="portfolio-overlay-arrow">↗</div>
+              <p class="portfolio-overlay-sub">Brand Design</p>
+              <p class="portfolio-overlay-title">Ambition Guru</p>
+            </div>
+          </div>
+          <div class="portfolio-info">
+            <p class="portfolio-info-title">Ambition Guru</p>
+            <p class="portfolio-info-cat">Brand / Visual Design</p>
+          </div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="portfolio-item reveal"
+             data-title="Ghode Jatra"
+             data-cat="Cultural / Graphic Design"
+             data-img="portfolio/Ghode Jatra.png">
+          <div class="portfolio-thumb">
+            <img class="portfolio-thumb-img" src="portfolio/Ghode Jatra.png" alt="Ghode Jatra" />
+            <div class="portfolio-overlay">
+              <div class="portfolio-overlay-arrow">↗</div>
+              <p class="portfolio-overlay-sub">Cultural Design</p>
+              <p class="portfolio-overlay-title">Ghode Jatra</p>
+            </div>
+          </div>
+          <div class="portfolio-info">
+            <p class="portfolio-info-title">Ghode Jatra</p>
+            <p class="portfolio-info-cat">Cultural / Graphic Design</p>
+          </div>
+        </div>
+
+        <!-- Item 4 -->
+        <div class="portfolio-item reveal"
+             data-title="Laufey"
+             data-cat="Poster / Illustration"
+             data-img="portfolio/Laufey.png">
+          <div class="portfolio-thumb">
+            <img class="portfolio-thumb-img" src="portfolio/Laufey.png" alt="Laufey" />
+            <div class="portfolio-overlay">
+              <div class="portfolio-overlay-arrow">↗</div>
+              <p class="portfolio-overlay-sub">Poster Design</p>
+              <p class="portfolio-overlay-title">Laufey</p>
+            </div>
+          </div>
+          <div class="portfolio-info">
+            <p class="portfolio-info-title">Laufey</p>
+            <p class="portfolio-info-cat">Poster / Illustration</p>
+          </div>
+        </div>
+
+        <!-- Item 5 -->
+        <div class="portfolio-item reveal"
+             data-title="New Year Design 11"
+             data-cat="Seasonal / Graphic Design"
+             data-img="portfolio/New Year Design 11.png">
+          <div class="portfolio-thumb">
+            <img class="portfolio-thumb-img" src="portfolio/New Year Design 11.png" alt="New Year Design 11" />
+            <div class="portfolio-overlay">
+              <div class="portfolio-overlay-arrow">↗</div>
+              <p class="portfolio-overlay-sub">Seasonal Design</p>
+              <p class="portfolio-overlay-title">New Year Design 11</p>
+            </div>
+          </div>
+          <div class="portfolio-info">
+            <p class="portfolio-info-title">New Year Design 11</p>
+            <p class="portfolio-info-cat">Seasonal / Graphic Design</p>
+          </div>
+        </div>
+
+        <!-- Item 6 -->
+        <div class="portfolio-item reveal"
+             data-title="Ram Navami"
+             data-cat="Cultural / Graphic Design"
+             data-img="portfolio/Ram Navami.png">
+          <div class="portfolio-thumb">
+            <img class="portfolio-thumb-img" src="portfolio/Ram Navami.png" alt="Ram Navami" />
+            <div class="portfolio-overlay">
+              <div class="portfolio-overlay-arrow">↗</div>
+              <p class="portfolio-overlay-sub">Cultural Design</p>
+              <p class="portfolio-overlay-title">Ram Navami</p>
+            </div>
+          </div>
+          <div class="portfolio-info">
+            <p class="portfolio-info-title">Ram Navami</p>
+            <p class="portfolio-info-cat">Cultural / Graphic Design</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       LIGHTBOX
+  ============================================= -->
+  <div id="lightbox">
+    <div class="lightbox-content">
+      <button class="lightbox-close" id="lightboxClose" aria-label="Close">✕</button>
+      <div class="lightbox-image" id="lightboxImage"></div>
+      <div class="lightbox-meta">
+        <div>
+          <p class="lightbox-title" id="lightboxTitle"></p>
+          <p class="lightbox-cat" id="lightboxCat"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- =============================================
+       CONTACT
+  ============================================= -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-inner">
+        <p class="section-label reveal">Contact</p>
+        <h2 class="contact-heading reveal">Let's work<br /><em>together.</em></h2>
+        <p class="contact-text reveal">
+          Open to freelance design projects, collaborations, and interesting conversations.
+          The best work starts with a simple hello.
+        </p>
+        <a href="mailto:work.justinacharya@gmail.com" class="contact-email reveal">
+          work.justinacharya@gmail.com
+        </a>
+        <div class="social-links reveal">
+          <a href="https://www.behance.net/justinacharya2" class="social-link">Behance</a>
+          <a href="https://github.com/Justincodess" class="social-link">GitHub</a>
+          <a href="https://www.linkedin.com/in/justin-acharya-a58120256/" class="social-link">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       FOOTER
+  ============================================= -->
+  <footer>
+    <div class="container">
+      <p class="footer-copy">© 2025 Justin Acharya. All rights reserved.</p>
+      <a href="#hero" class="footer-back">Back to top ↑</a>
+    </div>
+  </footer>
+
+  <!-- =============================================
+       JAVASCRIPT
+  ============================================= -->
+  <script>
+    /* --- Navbar scroll effect --- */
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 30);
+    });
+
+    /* --- Mobile menu toggle --- */
+    const navToggle   = document.getElementById('navToggle');
+    const mobileMenu  = document.getElementById('mobileMenu');
+
+    navToggle.addEventListener('click', () => {
+      const isOpen = mobileMenu.classList.toggle('open');
+      navToggle.classList.toggle('open', isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    });
+
+    function closeMobile() {
+      mobileMenu.classList.remove('open');
+      navToggle.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    /* --- Scroll reveal (IntersectionObserver) --- */
+    const revealEls = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          // Stagger siblings slightly
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, 80);
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    revealEls.forEach(el => revealObserver.observe(el));
+
+    /* --- Lightbox --- */
+    const lightbox      = document.getElementById('lightbox');
+    const lightboxImage = document.getElementById('lightboxImage');
+    const lightboxTitle = document.getElementById('lightboxTitle');
+    const lightboxCat   = document.getElementById('lightboxCat');
+    const lightboxClose = document.getElementById('lightboxClose');
+
+    // Map each portfolio item to image data
+    const portfolioItems = document.querySelectorAll('.portfolio-item');
+    portfolioItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const title = item.dataset.title;
+        const cat   = item.dataset.cat;
+        const img   = item.dataset.img;
+
+        lightboxTitle.textContent = title;
+        lightboxCat.textContent   = cat;
+
+        lightboxImage.innerHTML = '';
+        const imgEl = document.createElement('img');
+        imgEl.src = img;
+        imgEl.alt = title;
+        imgEl.style.cssText = 'width:100%;height:100%;object-fit:contain;display:block;';
+        lightboxImage.appendChild(imgEl);
+
+        lightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    lightboxClose.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', e => {
+      if (e.target === lightbox) closeLightbox();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+  </script>
 
 </body>
 </html>
